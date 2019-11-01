@@ -1,0 +1,17 @@
+{
+  "Name": "Timelapse",
+  "Author": "Adsamcik",
+  "Version": "1.0.0",
+  "Description": "Record timelapse of your farm.",
+  "UniqueID": "adsamcik.timelapse",
+  "EntryDll": "Timelapse.dll",
+  "MinimumApiVersion": "2.9.0",
+  "UpdateKeys": [],
+  "Dependencies": [
+    {
+      "UniqueID": "spacechase0.MapImageExporter",
+      "IsRequired": true,
+      "MinimumVersion": "1.0.6"
+    }
+  ]
+}
