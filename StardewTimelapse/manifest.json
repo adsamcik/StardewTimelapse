@@ -6,7 +6,7 @@
   "UniqueID": "adsamcik.timelapse",
   "EntryDll": "Timelapse.dll",
   "MinimumApiVersion": "2.9.0",
-  "UpdateKeys": [],
+  "UpdateKeys": ["GitHub:adsamcik/StardewTimelapse"],
   "Dependencies": [
     {
       "UniqueID": "spacechase0.MapImageExporter",
