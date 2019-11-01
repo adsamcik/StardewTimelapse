@@ -41,9 +41,9 @@ namespace StardewTimelapse {
             if (exportDirectory == null) {
                 exportDirectory = stardewRoot.CreateSubdirectory("MapExport");
             }
-
             var playerName = Game1.player.Name;
-            timelapseDirectory = exportDirectory.CreateSubdirectory($"{timelapseDirectoryName}-{playerName}");
+            var gameId = Game1.uniqueIDForThisGame;
+            timelapseDirectory = exportDirectory.CreateSubdirectory($"{timelapseDirectoryName}-{playerName}-{gameId}");
             UpdateLastIndex();
         }
 
