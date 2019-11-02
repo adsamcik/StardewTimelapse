@@ -93,7 +93,7 @@ namespace StardewTimelapse {
             var desiredPath = Path.Combine(timelapseDirectory.FullName, $"{GetScreenshotName()}{extension}");
             var desiredFile = new FileInfo(desiredPath);
             if (!desiredFile.Exists) {
-                capture.MoveTo(desiredFile.FullName);
+                capture.CopyTo(desiredFile.FullName);
             }
         }
 
