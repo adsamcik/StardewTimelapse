@@ -18,7 +18,7 @@ namespace StardewTimelapse {
         private DirectoryInfo exportDirectory;
         private DirectoryInfo timelapseDirectory;
 
-        private bool isFarmLoaded;
+        private bool isNewDay;
 
         private FileSystemWatcher watcher = new FileSystemWatcher();
 
@@ -64,14 +64,12 @@ namespace StardewTimelapse {
 
         private void OnSaveLoaded(object sender, SaveLoadedEventArgs e) {
             Initialize();
-            Helper.Events.Player.Warped += OnWarped;
         }
 
 
         private void OnWarped(object sender, WarpedEventArgs e) {
-            if (e.NewLocation.Name == farmMapName) {
+            if (e.NewLocation.Name == farmMapName && e.IsLocalPlayer) {
                 Helper.Events.Player.Warped -= OnWarped;
-                isFarmLoaded = true;
                 CaptureMap();
             }
         }
@@ -81,9 +79,8 @@ namespace StardewTimelapse {
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The event arguments.</param>
         private void OnDayStarted(object sender, DayStartedEventArgs e) {
-            if (isFarmLoaded) {
-                CaptureMap();
-            }
+            isNewDay = true;
+            Helper.Events.Player.Warped += OnWarped;
         }
 
         private void MoveMapCapture(FileInfo capture) {
@@ -116,6 +113,7 @@ namespace StardewTimelapse {
         }
 
         private void CaptureMap() {
+            isNewDay = false;
             Helper.ConsoleCommands.Trigger("export", new[] { "Farm", "all" });
         }
     }
