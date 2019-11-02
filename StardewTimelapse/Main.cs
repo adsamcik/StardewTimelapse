@@ -13,11 +13,14 @@ namespace StardewTimelapse {
     public class ModEntry : Mod {
         private const string timelapseDirectoryBaseName = "timelapse";
         private const string farmMapName = "Farm";
+        private const string captureExtension = "png";
 
         private DirectoryInfo exportDirectory;
         private DirectoryInfo timelapseDirectory;
 
         private bool isFarmLoaded;
+
+        private FileSystemWatcher watcher = new FileSystemWatcher();
 
         /*********
         ** Public methods
@@ -32,6 +35,7 @@ namespace StardewTimelapse {
         private void Initialize() {
             InitializeExportDirectory();
             SelectTimelapseDirectory();
+            StartWatchingChanges();
         }
 
         private string GetDirectoryName() {
@@ -93,12 +97,28 @@ namespace StardewTimelapse {
             }
         }
 
+        private void StartWatchingChanges() {
+            //var mapExport = exportDirectory.EnumerateFiles().FirstOrDefault((file) => Path.GetFileNameWithoutExtension(file.Name) == farmMapName);
+            watcher.Path = exportDirectory.FullName;
+            watcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite;
+            watcher.Filter = $"{farmMapName}.{captureExtension}";
+            watcher.Changed += OnFarmCaptureChanged;
+            watcher.Created += OnFarmCaptureChanged;
+            watcher.EnableRaisingEvents = true;
+        }
+
+        private void OnFarmCaptureChanged(object sender, FileSystemEventArgs e) {
+            var fileName = Path.GetFileNameWithoutExtension(e.FullPath);
+            if (fileName == farmMapName &&
+                (e.ChangeType == WatcherChangeTypes.Created || e.ChangeType == WatcherChangeTypes.Changed)) {
+                try {
+                    MoveMapCapture(new FileInfo(e.FullPath));
+                } catch (IOException) { }
+            }
+        }
+
         private void CaptureMap() {
             Helper.ConsoleCommands.Trigger("export", new[] { "Farm", "all" });
-            var mapExport = exportDirectory.EnumerateFiles().FirstOrDefault((file) => Path.GetFileNameWithoutExtension(file.Name) == farmMapName);
-            if (mapExport != null) {
-                MoveMapCapture(mapExport);
-            }
         }
     }
 }
