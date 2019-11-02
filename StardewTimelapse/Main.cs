@@ -46,9 +46,7 @@ namespace StardewTimelapse {
 
         private string GetScreenshotName() {
             var date = Game1.Date;
-            var season = date.Season;
-            var day = date.DayOfMonth;
-            return $"{season}-{day}";
+            return $"{date.Year}-{date.Season}-{date.DayOfMonth}";
         }
 
         private void InitializeExportDirectory() {
